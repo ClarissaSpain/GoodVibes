@@ -21,7 +21,7 @@
               if (filter_var($email, FILTER_VALIDATE_EMAIL)){
                 //check if email is already used
                 if (!DB::query('SELECT email FROM goodvibes.users WHERE email=:email', array(':email'=>$email))) {
-          DB::query('INSERT INTO goodvibes.users VALUES (NULL, :username, :fullname, :password, :email)', array(':username'=>$username, ':fullname'=>$fullname, ':password'=>password_hash($password, PASSWORD_BCRYPT), ':email'=>$email));  
+          DB::query('INSERT INTO goodvibes.users VALUES (NULL, :username, :fullname, :password, :email, NULL)', array(':username'=>$username, ':fullname'=>$fullname, ':password'=>password_hash($password, PASSWORD_BCRYPT), ':email'=>$email));  
     
       echo "Success!";
                 }else {
