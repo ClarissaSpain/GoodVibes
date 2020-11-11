@@ -1,7 +1,7 @@
 <?php
 
 class Post {
-    public static function createPOst($postbody, $loggedInIdUsers, $profileUserId){
+    public static function createPost($postbody, $loggedInIdUsers, $profileUserId){
         
         //check to see if its the right length
         if (strlen($postbody) > 160 || strlen($postbody) <1){
