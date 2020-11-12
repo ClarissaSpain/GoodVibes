@@ -12,11 +12,11 @@ class Post {
         //check to see if the user is posting to their profile only
         if ($loggedInIdUsers == $profileUserId){
 
-            if (count(self::notify($postbody)) !=0){
-                foreach (self::notify($postbody) as $key => $n) {
+            if (count(Notify::createNotify($postbody)) !=0){
+                foreach (Notify::createNotify($postbody) as $key => $n) {
                     $s = $loggedInIdUsers;
                     $r = DB::query('SELECT idusers FROM goodvibes.users WHERE username=:username', array(':username'=>$key))[0]['idusers'];
-                     DB::query('INSERT INTO goodvibes.notify VALUES (NULL, :typenotify, :receiver, :sender)', array(':typenotify'=>$n, ':receiver'=>$r, ':sender'=>$s));
+                     DB::query('INSERT INTO goodvibes.notify VALUES (NULL, :typenotify, :receiver, :sender, :extra)', array(':typenotify'=>$n["typenotify"], ':receiver'=>$r, ':sender'=>$s, ':extra'=>$n["extra"]));
                 }
             }
 
@@ -36,6 +36,13 @@ class Post {
         $topics = self::getTopics($postbody);
         //check to see if the user is posting to their profile only
         if ($loggedInIdUsers == $profileUserId){
+            if (count(Notify::createNotify($postbody)) !=0){
+                foreach (Notify::CreateNotify($postbody) as $key => $n) {
+                    $s = $loggedInIdUsers;
+                    $r = DB::query('SELECT idusers FROM goodvibes.users WHERE username=:username', array(':username'=>$key))[0]['idusers'];
+                     DB::query('INSERT INTO goodvibes.notify VALUES (NULL, :typenotify, :receiver, :sender, :extra)', array(':typenotify'=>$n["typenotify"], ':receiver'=>$r, ':sender'=>$s, ':extra'=>$n["extra"]));
+                }
+            }
 
         DB::query('INSERT INTO goodvibes.posts VALUES (Null, :postbody, NOW(), :idusers, 0, NULL)', array(':postbody'=>$postbody, ':idusers'=>$profileUserId));
         $idposts = DB::query('SELECT idposts FROM goodvibes.posts WHERE idusers=:idusers ORDER BY idposts DESC LIMIT 1;', array(':idusers'=>$loggedInIdUsers))[0]['idposts'];
@@ -48,6 +55,7 @@ class Post {
         if (!DB::query('SELECT idusers FROM goodvibes.posts_likes WHERE idposts=:idposts AND idusers=:idusers', array(':idposts'=>$idposts, ':idusers'=>$likerId))) {
             DB::query('UPDATE goodvibes.posts SET likes=likes+1 WHERE idposts=:idposts', array(':idposts'=>$idposts));
             DB::query('INSERT INTO goodvibes.posts_likes VALUES (NULL, :idposts, :idusers)', array(':idposts'=>$idposts, ':idusers'=>$likerId));
+            Notify::createNotify($idposts, " ");
             } else {
             //delete a like
             DB::query('UPDATE goodvibes.posts SET likes=likes-1 WHERE idposts=:idposts', array(':idposts'=>$idposts));
@@ -70,20 +78,6 @@ class Post {
         return $topics;
 }
     
-    public static function notify($text) {
-        $text = explode(" ", $text);
-        $notify = array();
-
-        foreach ($text as $word) {
-                if (substr($word, 0, 1) == "@") {
-                    
-                    // $esc_word = preg_replace("/[^a-zA-Z0-9]/", "", $word);
-                    $notify[substr($word, 1)] = 1;
-                        
-                    }
-                }
-            return $notify;
-        }
     //method for @mentions 
     public static function link_add($text) {
 

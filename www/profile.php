@@ -2,6 +2,7 @@
 include('includes/db_connection.php');
 include('includes/Login.php');
 include('includes/Post.php');
+include('includes/Notify.php');
 
 
 //variables
