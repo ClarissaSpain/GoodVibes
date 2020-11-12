@@ -1,5 +1,6 @@
 <?php
   include('includes/db_connection.php');
+//   require_once('PHPMailer/PHPMailerAutoload.php');
 
   if(isset($_POST['createaccount'])) {
       $username = $_POST['username'];
