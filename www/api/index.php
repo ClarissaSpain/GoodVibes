@@ -1,7 +1,7 @@
 <?php
 require_once("DB.php");
 
-$db = new DB("127.0.0.1", "SocialNetwork", "root", "");
+$db = new DB("127.0.0.1", "goodvibes", "root", "markie11");
 
 if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
