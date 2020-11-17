@@ -44,7 +44,7 @@ class Post {
                 }
             }
 
-        DB::query('INSERT INTO goodvibes.posts VALUES (Null, :postbody, NOW(), :idusers, 0, NULL)', array(':postbody'=>$postbody, ':idusers'=>$profileUserId));
+        DB::query('INSERT INTO goodvibes.posts VALUES (NULL, :postbody, NOW(), :idusers, 0, NULL, NULL)', array(':postbody'=>$postbody, ':idusers'=>$profileUserId));
         $idposts = DB::query('SELECT idposts FROM goodvibes.posts WHERE idusers=:idusers ORDER BY idposts DESC LIMIT 1;', array(':idusers'=>$loggedInIdUsers))[0]['idposts'];
         }else{
                 die('Incorrect User');
@@ -120,7 +120,7 @@ class Post {
                 ";
    
            } else {
-            $posts .= "<img src='".$p['postimg']."'>".self::link_add($p['body'])."
+            $posts .= "<img src='".$p['postimg']." style='width:200px;''>".self::link_add($p['body'])."
                    <form action='profile.php?username=$username&idposts=".$p['idposts']."' method='post'>
                            <input type='submit' name='unlike' value='Unlike'>
                            <span>".$p['likes']." likes</span>
